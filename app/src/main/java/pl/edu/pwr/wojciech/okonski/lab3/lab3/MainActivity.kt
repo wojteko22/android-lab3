@@ -1,10 +1,12 @@
 package pl.edu.pwr.wojciech.okonski.lab3.lab3
 
-import android.app.DialogFragment
+import android.content.Intent
 import android.hardware.Sensor
 import android.hardware.SensorManager
 import android.os.Bundle
+import android.support.v4.view.MenuItemCompat
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.ShareActionProvider
 import android.view.Menu
 import android.view.MenuItem
 import android.view.WindowManager
@@ -12,12 +14,20 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity(), OnColorSelectionListener {
-    private val sensorManager: SensorManager by lazy {
+    val sensorManager: SensorManager by lazy {
         getSystemService(SENSOR_SERVICE) as SensorManager
     }
-    private val accelerometer: Sensor by lazy {
+    val accelerometer: Sensor by lazy {
         sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
     }
+    val sendIntent by lazy {
+        with(Intent(Intent.ACTION_SEND)) {
+            putExtra(Intent.EXTRA_TEXT, getString(R.string.shareMessage))
+            type = "text/plain"
+            this
+        }
+    }
+    lateinit private var shareActionProvider: ShareActionProvider
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,12 +48,18 @@ class MainActivity : AppCompatActivity(), OnColorSelectionListener {
 
     override fun onCreateOptionsMenu(menu: Menu) = toTrue {
         menuInflater.inflate(R.menu.menu_main, menu)
+        prepareSharing(menu)
+    }
+
+    private fun prepareSharing(menu: Menu) {
+        val shareItem = menu.findItem(R.id.share)
+        shareActionProvider = MenuItemCompat.getActionProvider(shareItem) as ShareActionProvider
+        shareActionProvider.setShareIntent(sendIntent)
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_settings -> toTrue {
-            val dialog: DialogFragment = ColorDialog()
-            dialog.show(fragmentManager, "ColorDialogFragment")
+            ColorDialog().show(fragmentManager, "ColorDialogFragment")
         }
         else -> super.onOptionsItemSelected(item)
     }
