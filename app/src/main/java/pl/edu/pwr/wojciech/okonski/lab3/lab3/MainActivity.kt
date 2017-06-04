@@ -40,18 +40,12 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.menu_main, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_settings -> toTrue {
-                val dialog: DialogFragment = ColorDialog()
-                dialog.show(fragmentManager, "ColorDialogFragment")
-            }
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_settings -> toTrue {
+            val dialog: DialogFragment = ColorDialog()
+            dialog.show(fragmentManager, "ColorDialogFragment")
         }
-        return super.onOptionsItemSelected(item)
+        else -> super.onOptionsItemSelected(item)
     }
 }
 
-fun toTrue(func: () -> Unit): Boolean {
-    func()
-    return true
-}
