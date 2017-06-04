@@ -19,29 +19,49 @@ class ShapeView(context: Context, attrs: AttributeSet?) : ImageView(context, att
     private val shape = ShapeDrawable(OvalShape())
 
     init {
-        shape.paint.color = Color.GREEN
+        setShapeColor(Color.GREEN)
     }
 
-    fun changeShapeColor(newColor: Int) {
+    fun setShapeColor(newColor: Int) {
         shape.paint.color = newColor
     }
 
     override fun onSensorChanged(event: SensorEvent) {
         updateXIfNecessary(event)
-        updateYIfNecesarry(event)
+        updateYIfNecessary(event)
     }
 
     private fun updateXIfNecessary(event: SensorEvent) {
         val xChange = event.values[0].toInt()
-        if (xChange > 0 && shapeX > 0 || xChange < 0 && shapeX < measuredWidth - shapeWidth)
-            shapeX -= xChange * Math.abs(xChange)
+        val maxX = measuredWidth - shapeWidth
+        shapeX = when {
+            xChange >= 0 ->
+                if (shapeX > 0)
+                    shapeX - squareWithSign(xChange)
+                else 0
+            else ->
+                if (shapeX < maxX)
+                    shapeX - squareWithSign(xChange)
+                else maxX
+        }
     }
 
-    private fun updateYIfNecesarry(event: SensorEvent) {
+    private fun updateYIfNecessary(event: SensorEvent) {
         val yChange = event.values[1].toInt()
-        if (yChange < 0 && shapeY > 0 || yChange > 0 && shapeY < measuredHeight - shapeHeight)
-            shapeY += yChange * Math.abs(yChange)
+        val maxY = measuredHeight - shapeHeight
+        shapeY = when {
+            yChange <= 0 ->
+                if (shapeY > 0)
+                    shapeY + squareWithSign(yChange)
+                else 0
+            else ->
+                if (shapeY < maxY)
+                    shapeY + squareWithSign(yChange)
+                else maxY
+        }
     }
+
+    private fun squareWithSign(number: Int) = number * Math.abs(number)
 
     override fun onDraw(canvas: Canvas) {
         shape.setBounds(shapeX, shapeY, shapeX + shapeWidth, shapeY + shapeHeight)

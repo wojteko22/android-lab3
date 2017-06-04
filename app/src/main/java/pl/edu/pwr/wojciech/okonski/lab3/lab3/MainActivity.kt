@@ -65,6 +65,6 @@ class MainActivity : AppCompatActivity(), OnColorSelectionListener {
     }
 
     override fun onColorSelection(color: Int) {
-        shapeView.changeShapeColor(color)
+        shapeView.setShapeColor(color)
     }
 }
