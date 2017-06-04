@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.WindowManager
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
@@ -26,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         sensorManager.registerListener(shapeView, accelerometer, SensorManager.SENSOR_DELAY_GAME)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onPause() {
