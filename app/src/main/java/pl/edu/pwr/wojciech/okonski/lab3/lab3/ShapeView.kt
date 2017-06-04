@@ -22,6 +22,10 @@ class ShapeView(context: Context, attrs: AttributeSet?) : ImageView(context, att
         shape.paint.color = Color.GREEN
     }
 
+    fun changeShapeColor(newColor: Int) {
+        shape.paint.color = newColor
+    }
+
     override fun onSensorChanged(event: SensorEvent) {
         updateXIfNecessary(event)
         updateYIfNecesarry(event)

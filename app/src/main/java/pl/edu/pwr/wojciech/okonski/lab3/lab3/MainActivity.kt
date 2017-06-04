@@ -11,7 +11,7 @@ import android.view.WindowManager
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnColorSelectionListener {
     private val sensorManager: SensorManager by lazy {
         getSystemService(SENSOR_SERVICE) as SensorManager
     }
@@ -47,5 +47,8 @@ class MainActivity : AppCompatActivity() {
         }
         else -> super.onOptionsItemSelected(item)
     }
-}
 
+    override fun onColorSelection(color: Int) {
+        shapeView.changeShapeColor(color)
+    }
+}
