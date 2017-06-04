@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity(), OnColorSelectionListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.action_settings -> toTrue {
+        R.id.action_colors -> toTrue {
             ColorDialog().show(fragmentManager, "ColorDialogFragment")
         }
         else -> super.onOptionsItemSelected(item)
