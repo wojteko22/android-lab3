@@ -30,15 +30,14 @@ class ShapeView(context: Context, attrs: AttributeSet?) : ImageView(context, att
     private fun updateXIfNecessary(event: SensorEvent) {
         val xChange = event.values[0].toInt()
         if (xChange > 0 && shapeX > 0 || xChange < 0 && shapeX < measuredWidth - shapeWidth)
-            shapeX -= xChange
+            shapeX -= xChange * Math.abs(xChange)
     }
 
     private fun updateYIfNecesarry(event: SensorEvent) {
         val yChange = event.values[1].toInt()
         if (yChange < 0 && shapeY > 0 || yChange > 0 && shapeY < measuredHeight - shapeHeight)
-            shapeY += yChange
+            shapeY += yChange * Math.abs(yChange)
     }
-
 
     override fun onDraw(canvas: Canvas) {
         shape.setBounds(shapeX, shapeY, shapeX + shapeWidth, shapeY + shapeHeight)
