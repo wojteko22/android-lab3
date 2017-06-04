@@ -6,7 +6,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 
-class ColorDialog : DialogFragment() {
+class ColorDialog(val titleId: Int) : DialogFragment() {
     private val listener: OnColorSelectionListener by lazy {
         try {
             activity as OnColorSelectionListener
@@ -16,12 +16,12 @@ class ColorDialog : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = AlertDialog.Builder(activity)
-            .setTitle(R.string.pick_a_shape_color)
+            .setTitle(titleId)
             .setItems(R.array.colors, { _, which ->
                 when (which) {
-                    0 -> listener.onColorSelection(Color.RED)
-                    1 -> listener.onColorSelection(Color.GREEN)
-                    2 -> listener.onColorSelection(Color.BLUE)
+                    0 -> listener.onColorSelection(Color.RED, this)
+                    1 -> listener.onColorSelection(Color.GREEN, this)
+                    2 -> listener.onColorSelection(Color.BLUE, this)
                 }
             })
             .create()
