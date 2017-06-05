@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.widget.SeekBar
 
-class SizeDialog : DialogFragment() {
+class SizeDialog(initialPercent: Float) : DialogFragment() {
     private var sizePercent = 0.1f
     private val listener: OnSizeChangedListener by lazy {
         try {
@@ -16,20 +16,15 @@ class SizeDialog : DialogFragment() {
         }
     }
 
-    val seekBar: SeekBar
-        get() {
-            val seekBar = SeekBar(activity)
-            seekBar.max = 1
-            seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                    sizePercent = progress * 0.8f + 0.1f
-                }
-
-                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-            })
-            return seekBar
+    val seekBar: SeekBar by lazy {
+        with(SeekBar(activity)) {
+            progress = ((initialPercent - 0.1f) / 0.7f * 100f).toInt()
+            setOnProgressChangedListener {
+                sizePercent = it / 100f * 0.7f + 0.1f
+            }
+            this
         }
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = AlertDialog.Builder(activity)
             .setTitle(R.string.apple_size)
@@ -39,5 +34,4 @@ class SizeDialog : DialogFragment() {
             })
             .setNegativeButton(R.string.cancel, null)
             .create()
-
 }

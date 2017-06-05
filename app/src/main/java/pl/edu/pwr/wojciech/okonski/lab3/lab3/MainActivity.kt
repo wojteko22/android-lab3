@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity(), OnColorSelectionListener, OnPointGaine
             backGroundColorDialog.show(fragmentManager, "BackGroundColorDialogFragment")
         }
         R.id.action_size -> toTrue {
-            SizeDialog().show(fragmentManager, "SizeDialogFragment")
+            SizeDialog(shapeView.appleSize.toFloat() / shapeView.shapeSize).show(fragmentManager, "SizeDialogFragment")
         }
         else -> super.onOptionsItemSelected(item)
     }
@@ -96,5 +96,6 @@ class MainActivity : AppCompatActivity(), OnColorSelectionListener, OnPointGaine
 
     override fun onSizeChanged(sizePercent: Float) {
         shapeView.appleSize = (sizePercent * shapeView.shapeSize).toInt()
+        shapeView.deployApple()
     }
 }

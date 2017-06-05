@@ -90,7 +90,7 @@ class ShapeView(context: Context, attrs: AttributeSet?) : ImageView(context, att
 
     private fun squareWithSign(number: Int) = number * Math.abs(number)
 
-    private fun deployApple() {
+    fun deployApple() {
         val x = generator.nextInt(measuredWidth - appleSize)
         val y = generator.nextInt(measuredHeight - appleSize)
         apple.setBounds(x, y, x + appleSize, y + appleSize)
