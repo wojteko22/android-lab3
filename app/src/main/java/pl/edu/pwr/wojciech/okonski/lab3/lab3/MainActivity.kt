@@ -14,7 +14,7 @@ import android.view.WindowManager
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
-class MainActivity : AppCompatActivity(), OnColorSelectionListener {
+class MainActivity : AppCompatActivity(), OnColorSelectionListener, OnPointGainedListener {
     private val sensorManager: SensorManager by lazy {
         getSystemService(SENSOR_SERVICE) as SensorManager
     }
@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity(), OnColorSelectionListener {
     private lateinit var shareActionProvider: ShareActionProvider
     private val shapeColorDialog by lazy { ColorDialog(R.string.pick_a_shape_color) }
     private val backGroundColorDialog by lazy { ColorDialog(R.string.pick_a_background_color) }
+    private var points = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,5 +75,10 @@ class MainActivity : AppCompatActivity(), OnColorSelectionListener {
         shapeColorDialog -> shapeView.setShapeColor(color)
         backGroundColorDialog -> shapeView.setBackgroundColor(color)
         else -> Unit
+    }
+
+    override fun onPointGained() {
+        points++
+        tvResult.text = points.toString()
     }
 }

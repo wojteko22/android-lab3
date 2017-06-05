@@ -22,6 +22,12 @@ class ShapeView(context: Context, attrs: AttributeSet?) : ImageView(context, att
     private val shape = ShapeDrawable(OvalShape())
     private val apple = ShapeDrawable()
     private val generator = Random()
+    private val listener: OnPointGainedListener =
+            try {
+                context as OnPointGainedListener
+            } catch (e: ClassCastException) {
+                throw ClassCastException(context.toString() + " must implement OnPointGainedListener")
+            }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
@@ -39,19 +45,19 @@ class ShapeView(context: Context, attrs: AttributeSet?) : ImageView(context, att
     }
 
     override fun onDraw(canvas: Canvas) {
+        apple.draw(canvas)
         shape.setBounds(shapeX, shapeY, shapeX + shapeWidth, shapeY + shapeHeight)
         shape.draw(canvas)
-        apple.draw(canvas)
         invalidate()
     }
 
     override fun onSensorChanged(event: SensorEvent) {
         updateXIfNecessary(event)
         updateYIfNecessary(event)
-//        val number = tvResult.text.toString().toInt()
-//        tvResult.text = (number + 1).toString()
-        if (shape.bounds.contains(apple.bounds))
+        if (shape.bounds.contains(apple.bounds)) {
+            listener.onPointGained()
             deployApple()
+        }
     }
 
     private fun updateXIfNecessary(event: SensorEvent) {
