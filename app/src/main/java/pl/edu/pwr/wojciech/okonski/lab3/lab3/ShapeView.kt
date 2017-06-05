@@ -15,10 +15,8 @@ import java.util.*
 class ShapeView(context: Context, attrs: AttributeSet?) : ImageView(context, attrs), SensorEventListener {
     private var shapeX: Int = 0
     private var shapeY: Int = 0
-    private val shapeWidth = 100
-    private val shapeHeight = 100
-    private val appleWidth = 30
-    private val appleHeight = 30
+    val shapeSize = 100
+    var appleSize = 30
     private val shape = ShapeDrawable(OvalShape())
     private val apple = ShapeDrawable()
     private val generator = Random()
@@ -46,7 +44,7 @@ class ShapeView(context: Context, attrs: AttributeSet?) : ImageView(context, att
 
     override fun onDraw(canvas: Canvas) {
         apple.draw(canvas)
-        shape.setBounds(shapeX, shapeY, shapeX + shapeWidth, shapeY + shapeHeight)
+        shape.setBounds(shapeX, shapeY, shapeX + shapeSize, shapeY + shapeSize)
         shape.draw(canvas)
         invalidate()
     }
@@ -62,7 +60,7 @@ class ShapeView(context: Context, attrs: AttributeSet?) : ImageView(context, att
 
     private fun updateXIfNecessary(event: SensorEvent) {
         val xChange = event.values[0].toInt()
-        val maxX = measuredWidth - shapeWidth
+        val maxX = measuredWidth - shapeSize
         shapeX = when {
             xChange >= 0 ->
                 if (shapeX > 0)
@@ -77,7 +75,7 @@ class ShapeView(context: Context, attrs: AttributeSet?) : ImageView(context, att
 
     private fun updateYIfNecessary(event: SensorEvent) {
         val yChange = event.values[1].toInt()
-        val maxY = measuredHeight - shapeHeight
+        val maxY = measuredHeight - shapeSize
         shapeY = when {
             yChange <= 0 ->
                 if (shapeY > 0)
@@ -93,9 +91,9 @@ class ShapeView(context: Context, attrs: AttributeSet?) : ImageView(context, att
     private fun squareWithSign(number: Int) = number * Math.abs(number)
 
     private fun deployApple() {
-        val x = generator.nextInt(measuredWidth - appleWidth)
-        val y = generator.nextInt(measuredHeight - appleHeight)
-        apple.setBounds(x, y, x + appleWidth, y + appleHeight)
+        val x = generator.nextInt(measuredWidth - appleSize)
+        val y = generator.nextInt(measuredHeight - appleSize)
+        apple.setBounds(x, y, x + appleSize, y + appleSize)
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}

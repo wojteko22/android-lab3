@@ -10,4 +10,7 @@
     <string name="share">Share</string>
     <string name="shareMessage">I gained %1$d points in Wojtek\'s new app. It\'s awesome!</string>
     <string name="pick_a_background_color">Pick a background color</string>
+    <string name="cancel">Cancel</string>
+    <string name="change_apple_size">Change apple size</string>
+    <string name="apple_size">"Apple size"</string>
 </resources>

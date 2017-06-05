@@ -14,7 +14,7 @@ import android.view.WindowManager
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
-class MainActivity : AppCompatActivity(), OnColorSelectionListener, OnPointGainedListener {
+class MainActivity : AppCompatActivity(), OnColorSelectionListener, OnPointGainedListener, OnSizeChangedListener {
     private val sensorManager: SensorManager by lazy {
         getSystemService(SENSOR_SERVICE) as SensorManager
     }
@@ -67,10 +67,13 @@ class MainActivity : AppCompatActivity(), OnColorSelectionListener, OnPointGaine
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_shape_colors -> toTrue {
-            shapeColorDialog.show(fragmentManager, "ColorDialogFragment")
+            shapeColorDialog.show(fragmentManager, "ShapeColorDialogFragment")
         }
         R.id.action_background_colors -> toTrue {
-            backGroundColorDialog.show(fragmentManager, "ColorDialogFragment")
+            backGroundColorDialog.show(fragmentManager, "BackGroundColorDialogFragment")
+        }
+        R.id.action_size -> toTrue {
+            SizeDialog().show(fragmentManager, "SizeDialogFragment")
         }
         else -> super.onOptionsItemSelected(item)
     }
@@ -89,5 +92,9 @@ class MainActivity : AppCompatActivity(), OnColorSelectionListener, OnPointGaine
 
     private fun updateShareIntent() {
         shareActionProvider.setShareIntent(sendIntent)
+    }
+
+    override fun onSizeChanged(sizePercent: Float) {
+        shapeView.appleSize = (sizePercent * shapeView.shapeSize).toInt()
     }
 }
