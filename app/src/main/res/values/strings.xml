@@ -8,6 +8,6 @@
     <string name="green">Green</string>
     <string name="blue">Blue</string>
     <string name="share">Share</string>
-    <string name="shareMessage">Wojtek created awesome app. Maybe it will be available soon</string>
+    <string name="shareMessage">I gained %1$d points in Wojtek\'s new app. It\'s awesome!</string>
     <string name="pick_a_background_color">Pick a background color</string>
 </resources>

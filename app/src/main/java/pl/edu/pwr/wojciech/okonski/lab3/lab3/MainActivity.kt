@@ -21,14 +21,18 @@ class MainActivity : AppCompatActivity(), OnColorSelectionListener, OnPointGaine
     private val accelerometer: Sensor by lazy {
         sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
     }
-    private val sendIntent by lazy {
-        with(Intent(Intent.ACTION_SEND)) {
-            putExtra(Intent.EXTRA_TEXT, getString(R.string.shareMessage))
+    private lateinit var shareActionProvider: ShareActionProvider
+    private val sendIntent
+        get() = with(Intent(Intent.ACTION_SEND)) {
+            putExtra(Intent.EXTRA_TEXT, shareMessage)
             type = "text/plain"
             this
         }
-    }
-    private lateinit var shareActionProvider: ShareActionProvider
+    private val shareMessage: String
+        get() {
+            val sharingMessageTemplate = getString(R.string.shareMessage)
+            return String.format(sharingMessageTemplate, points)
+        }
     private val shapeColorDialog by lazy { ColorDialog(R.string.pick_a_shape_color) }
     private val backGroundColorDialog by lazy { ColorDialog(R.string.pick_a_background_color) }
     private var points = 0
@@ -58,7 +62,7 @@ class MainActivity : AppCompatActivity(), OnColorSelectionListener, OnPointGaine
     private fun prepareSharing(menu: Menu) {
         val shareItem = menu.findItem(R.id.share)
         shareActionProvider = MenuItemCompat.getActionProvider(shareItem) as ShareActionProvider
-        shareActionProvider.setShareIntent(sendIntent)
+        updateShareIntent()
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
@@ -80,5 +84,10 @@ class MainActivity : AppCompatActivity(), OnColorSelectionListener, OnPointGaine
     override fun onPointGained() {
         points++
         tvResult.text = points.toString()
+        updateShareIntent()
+    }
+
+    private fun updateShareIntent() {
+        shareActionProvider.setShareIntent(sendIntent)
     }
 }
