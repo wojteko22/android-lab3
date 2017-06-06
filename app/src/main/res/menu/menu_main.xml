@@ -23,7 +23,7 @@
     </item>
     <item
         android:id="@+id/action_size"
-        android:title="@string/change_apple_size"
+        android:title="@string/apple_size"
         app:showAsAction="ifRoom" />
 
 </menu>
