@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity(), OnColorSelectionListener, OnPointGainedListener, OnSizeChangedListener {
+    private var started: Boolean = false
     private val sensorManager: SensorManager by lazy {
         getSystemService(SENSOR_SERVICE) as SensorManager
     }
@@ -37,21 +38,34 @@ class MainActivity : AppCompatActivity(), OnColorSelectionListener, OnPointGaine
     private val shapeColorDialog by lazy { ColorDialog(R.string.pick_a_shape_color) }
     private val backGroundColorDialog by lazy { ColorDialog(R.string.pick_a_background_color) }
     private var points = 0
+    private val time = 20
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+        btnStart.setOnClickListener { startGame() }
+    }
 
-        object : CountDownTimer(30000, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                tvTimer.text = (millisUntilFinished / 1000).toString()
-            }
+    private fun startGame() {
+        btnStart.isEnabled = false
+        timer.start()
+        started = true
+    }
 
-            override fun onFinish() {
-//                mTextField.setText("done!")
-            }
-        }.start()
+    val timer = object : CountDownTimer(time * 1000L, 1000) {
+        override fun onTick(millisUntilFinished: Long) {
+            tvTimer.text = (millisUntilFinished / 1000).toString()
+        }
+
+        override fun onFinish() {
+            started = false
+            tvTimer.text = time.toString()
+            ResultDialog(points).show(fragmentManager, "ResultDialogFragment")
+            points = 0
+            displayPoints()
+            btnStart.isEnabled = true
+        }
     }
 
     override fun onResume() {
@@ -96,9 +110,15 @@ class MainActivity : AppCompatActivity(), OnColorSelectionListener, OnPointGaine
     }
 
     override fun onPointGained() {
-        points++
+        if (started) {
+            points++
+            displayPoints()
+            updateShareIntent()
+        }
+    }
+
+    private fun displayPoints() {
         tvResult.text = points.toString()
-        updateShareIntent()
     }
 
     private fun updateShareIntent() {
