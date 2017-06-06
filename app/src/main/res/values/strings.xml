@@ -14,4 +14,6 @@
     <string name="apple_size">"Apple size"</string>
     <string name="points">Points:</string>
     <string name="result_message">Congrats! You gained %1$d points!</string>
+    <string name="change_time">Change time</string>
+    <string name="set_time">Set time</string>
 </resources>

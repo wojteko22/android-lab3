@@ -29,9 +29,9 @@ class SizeDialog(initialPercent: Float) : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = AlertDialog.Builder(activity)
             .setTitle(R.string.apple_size)
             .setView(seekBar)
-            .setPositiveButton("OK", { _, _ ->
+            .setPositiveButton("OK") { _, _ ->
                 listener.onSizeChanged(sizePercent)
-            })
+            }
             .setNegativeButton(R.string.cancel, null)
             .create()
 }

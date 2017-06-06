@@ -15,7 +15,7 @@ import android.view.WindowManager
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
-class MainActivity : AppCompatActivity(), OnColorSelectionListener, OnPointGainedListener, OnSizeChangedListener {
+class MainActivity : AppCompatActivity(), OnColorSelectionListener, OnPointGainedListener, OnSizeChangedListener, OnTimeSetListener {
     private var started: Boolean = false
     private val sensorManager: SensorManager by lazy {
         getSystemService(SENSOR_SERVICE) as SensorManager
@@ -36,9 +36,9 @@ class MainActivity : AppCompatActivity(), OnColorSelectionListener, OnPointGaine
             return String.format(sharingMessageTemplate, points)
         }
     private val shapeColorDialog by lazy { ColorDialog(R.string.pick_a_shape_color) }
-    private val backGroundColorDialog by lazy { ColorDialog(R.string.pick_a_background_color) }
+    private val backgroundColorDialog by lazy { ColorDialog(R.string.pick_a_background_color) }
     private var points = 0
-    private val time = 20
+    private var time = 20
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,19 +53,26 @@ class MainActivity : AppCompatActivity(), OnColorSelectionListener, OnPointGaine
         started = true
     }
 
-    val timer = object : CountDownTimer(time * 1000L, 1000) {
-        override fun onTick(millisUntilFinished: Long) {
-            tvTimer.text = (millisUntilFinished / 1000).toString()
+    val timer
+        get() = object : CountDownTimer(time * 1000L, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                tvTimer.text = (millisUntilFinished / 1000).toString()
+            }
+
+            override fun onFinish() {
+                started = false
+                displayTime()
+                ResultDialog(points).show(fragmentManager, "ResultDialogFragment")
+                points = 0
+                displayPoints()
+                btnStart.isEnabled = true
+            }
+
+
         }
 
-        override fun onFinish() {
-            started = false
-            tvTimer.text = time.toString()
-            ResultDialog(points).show(fragmentManager, "ResultDialogFragment")
-            points = 0
-            displayPoints()
-            btnStart.isEnabled = true
-        }
+    private fun displayTime() {
+        tvTimer.text = time.toString()
     }
 
     override fun onResume() {
@@ -95,17 +102,20 @@ class MainActivity : AppCompatActivity(), OnColorSelectionListener, OnPointGaine
             shapeColorDialog.show(fragmentManager, "ShapeColorDialogFragment")
         }
         R.id.action_background_colors -> toTrue {
-            backGroundColorDialog.show(fragmentManager, "BackGroundColorDialogFragment")
+            backgroundColorDialog.show(fragmentManager, "BackgroundColorDialogFragment")
         }
         R.id.action_size -> toTrue {
             SizeDialog(shapeView.appleSize.toFloat() / shapeView.shapeSize).show(fragmentManager, "SizeDialogFragment")
+        }
+        R.id.action_timer -> toTrue {
+            TimeDialog().show(fragmentManager, "TimeDialogFragment")
         }
         else -> super.onOptionsItemSelected(item)
     }
 
     override fun onColorSelection(color: Int, dialog: DialogFragment) = when (dialog) {
         shapeColorDialog -> shapeView.setShapeColor(color)
-        backGroundColorDialog -> shapeView.setBackgroundColor(color)
+        backgroundColorDialog -> shapeView.setBackgroundColor(color)
         else -> Unit
     }
 
@@ -128,5 +138,10 @@ class MainActivity : AppCompatActivity(), OnColorSelectionListener, OnPointGaine
     override fun onSizeChanged(sizePercent: Float) {
         shapeView.appleSize = (sizePercent * shapeView.shapeSize).toInt()
         shapeView.deployApple()
+    }
+
+    override fun onTimeSet(time: Int) {
+        this.time = time
+        displayTime()
     }
 }

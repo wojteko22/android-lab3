@@ -25,5 +25,9 @@
         android:id="@+id/action_size"
         android:title="@string/apple_size"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_timer"
+        android:title="@string/change_time"
+        app:showAsAction="ifRoom" />
 
 </menu>
