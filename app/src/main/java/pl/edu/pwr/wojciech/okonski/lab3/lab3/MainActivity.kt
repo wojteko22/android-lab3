@@ -5,6 +5,7 @@ import android.content.Intent
 import android.hardware.Sensor
 import android.hardware.SensorManager
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.ShareActionProvider
@@ -41,6 +42,16 @@ class MainActivity : AppCompatActivity(), OnColorSelectionListener, OnPointGaine
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+
+        object : CountDownTimer(30000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                tvTimer.text = (millisUntilFinished / 1000).toString()
+            }
+
+            override fun onFinish() {
+//                mTextField.setText("done!")
+            }
+        }.start()
     }
 
     override fun onResume() {
