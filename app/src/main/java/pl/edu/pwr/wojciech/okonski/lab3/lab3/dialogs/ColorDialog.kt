@@ -1,10 +1,12 @@
-package pl.edu.pwr.wojciech.okonski.lab3.lab3
+package pl.edu.pwr.wojciech.okonski.lab3.lab3.dialogs
 
 import android.app.Dialog
 import android.app.DialogFragment
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
+import pl.edu.pwr.wojciech.okonski.lab3.lab3.R
+import pl.edu.pwr.wojciech.okonski.lab3.lab3.listeners.OnColorSelectionListener
 
 class ColorDialog(val titleId: Int) : DialogFragment() {
     private val listener: OnColorSelectionListener by lazy {

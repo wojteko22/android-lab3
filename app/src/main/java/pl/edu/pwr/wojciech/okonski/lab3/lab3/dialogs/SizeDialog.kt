@@ -1,10 +1,13 @@
-package pl.edu.pwr.wojciech.okonski.lab3.lab3
+package pl.edu.pwr.wojciech.okonski.lab3.lab3.dialogs
 
 import android.app.Dialog
 import android.app.DialogFragment
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.widget.SeekBar
+import pl.edu.pwr.wojciech.okonski.lab3.lab3.R
+import pl.edu.pwr.wojciech.okonski.lab3.lab3.listeners.OnSizeChangedListener
+import pl.edu.pwr.wojciech.okonski.lab3.lab3.setOnProgressChangedListener
 
 class SizeDialog(initialPercent: Float) : DialogFragment() {
     private var sizePercent = 0.1f

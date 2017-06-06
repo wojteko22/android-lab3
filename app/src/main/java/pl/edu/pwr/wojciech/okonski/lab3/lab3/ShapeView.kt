@@ -10,13 +10,10 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.util.AttributeSet
 import android.widget.ImageView
+import pl.edu.pwr.wojciech.okonski.lab3.lab3.listeners.OnPointGainedListener
 import java.util.*
 
 class ShapeView(context: Context, attrs: AttributeSet?) : ImageView(context, attrs), SensorEventListener {
-    private var shapeX: Int = 0
-    private var shapeY: Int = 0
-    val shapeSize = 100
-    var appleSize = 30
     private val shape = ShapeDrawable(OvalShape())
     private val apple = ShapeDrawable()
     private val generator = Random()
@@ -27,19 +24,21 @@ class ShapeView(context: Context, attrs: AttributeSet?) : ImageView(context, att
                 throw ClassCastException(context.toString() + " must implement OnPointGainedListener")
             }
 
+    private var shapeX: Int = 0
+    private var shapeY: Int = 0
+
+    val shapeSize = 100
+    var appleSize = 30
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         setShapeColor(Color.GREEN)
-        apple.setColor(Color.BLACK)
+        apple.color = Color.BLACK
         deployApple()
     }
 
     fun setShapeColor(color: Int) {
-        shape.setColor(color)
-    }
-
-    private fun ShapeDrawable.setColor(color: Int) {
-        this.paint.color = color
+        shape.color = color
     }
 
     override fun onDraw(canvas: Canvas) {

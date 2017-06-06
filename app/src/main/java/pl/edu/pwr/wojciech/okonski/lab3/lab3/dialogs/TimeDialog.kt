@@ -1,4 +1,4 @@
-package pl.edu.pwr.wojciech.okonski.lab3.lab3
+package pl.edu.pwr.wojciech.okonski.lab3.lab3.dialogs
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -8,6 +8,8 @@ import android.text.InputFilter
 import android.text.InputType
 import android.view.Gravity
 import android.widget.EditText
+import pl.edu.pwr.wojciech.okonski.lab3.lab3.R
+import pl.edu.pwr.wojciech.okonski.lab3.lab3.listeners.OnTimeSetListener
 
 class TimeDialog : DialogFragment() {
     private val listener: OnTimeSetListener by lazy {

@@ -14,31 +14,25 @@ import android.view.MenuItem
 import android.view.WindowManager
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import pl.edu.pwr.wojciech.okonski.lab3.lab3.dialogs.ColorDialog
+import pl.edu.pwr.wojciech.okonski.lab3.lab3.dialogs.ResultDialog
+import pl.edu.pwr.wojciech.okonski.lab3.lab3.dialogs.SizeDialog
+import pl.edu.pwr.wojciech.okonski.lab3.lab3.dialogs.TimeDialog
+import pl.edu.pwr.wojciech.okonski.lab3.lab3.listeners.OnColorSelectionListener
+import pl.edu.pwr.wojciech.okonski.lab3.lab3.listeners.OnPointGainedListener
+import pl.edu.pwr.wojciech.okonski.lab3.lab3.listeners.OnSizeChangedListener
+import pl.edu.pwr.wojciech.okonski.lab3.lab3.listeners.OnTimeSetListener
 
 class MainActivity : AppCompatActivity(), OnColorSelectionListener, OnPointGainedListener, OnSizeChangedListener, OnTimeSetListener {
-    private var started: Boolean = false
-    private val sensorManager: SensorManager by lazy {
-        getSystemService(SENSOR_SERVICE) as SensorManager
-    }
-    private val accelerometer: Sensor by lazy {
-        sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-    }
-    private lateinit var shareActionProvider: ShareActionProvider
-    private val sendIntent
-        get() = with(Intent(Intent.ACTION_SEND)) {
-            putExtra(Intent.EXTRA_TEXT, shareMessage)
-            type = "text/plain"
-            this
-        }
-    private val shareMessage: String
-        get() {
-            val sharingMessageTemplate = getString(R.string.shareMessage)
-            return String.format(sharingMessageTemplate, points)
-        }
+    private val sensorManager: SensorManager by lazy { getSystemService(SENSOR_SERVICE) as SensorManager }
+    private val accelerometer: Sensor by lazy { sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) }
     private val shapeColorDialog by lazy { ColorDialog(R.string.pick_a_shape_color) }
     private val backgroundColorDialog by lazy { ColorDialog(R.string.pick_a_background_color) }
+
+    private var started: Boolean = false
     private var points = 0
     private var time = 20
+    private lateinit var shareActionProvider: ShareActionProvider
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,8 +61,6 @@ class MainActivity : AppCompatActivity(), OnColorSelectionListener, OnPointGaine
                 displayPoints()
                 btnStart.isEnabled = true
             }
-
-
         }
 
     private fun displayTime() {
@@ -135,6 +127,19 @@ class MainActivity : AppCompatActivity(), OnColorSelectionListener, OnPointGaine
         shareActionProvider.setShareIntent(sendIntent)
     }
 
+    private val sendIntent
+        get() = with(Intent(Intent.ACTION_SEND)) {
+            putExtra(Intent.EXTRA_TEXT, shareMessage)
+            type = "text/plain"
+            this
+        }
+
+    private val shareMessage: String
+        get() {
+            val sharingMessageTemplate = getString(R.string.shareMessage)
+            return String.format(sharingMessageTemplate, points)
+        }
+
     override fun onSizeChanged(sizePercent: Float) {
         shapeView.appleSize = (sizePercent * shapeView.shapeSize).toInt()
         shapeView.deployApple()
@@ -142,6 +147,7 @@ class MainActivity : AppCompatActivity(), OnColorSelectionListener, OnPointGaine
 
     override fun onTimeSet(time: Int) {
         this.time = time
-        displayTime()
+        if (!started)
+            displayTime()
     }
 }
